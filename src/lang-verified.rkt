@@ -33,16 +33,19 @@
                [_ #f])]
             [else #f])))
 
+  ;; Search for sub-expression. Raise error if not found
   (define (search-subform/error l c form tag)
     (cond [(search-subform l c form) => values]
           [else (error tag "no syntax that starts at line ~a column ~a" l c)]))
 
-  ;; Search for sub-expresson that starts at line `l` column `c` in `form` and blame
+  ;; Blame sub-expression in `form` that starts at line `l` column `c`
   (define/contract (raise-simple-error l c msg form)
     (integer? integer? string? syntax? . -> . void?)
     (define subform (search-subform/error l c form 'raise-simple-error))
     (raise-syntax-error (error-name) msg subform))
 
+  ;; Blame sub-expression in `form` that starts at line `l` column `c`
+  ;; for violation with contract declared at line `ctc-l` column `ctc-c`
   (define/contract (raise-contract-error l c ctc-l ctc-c form)
     (integer? integer? integer? integer? syntax? . -> . void?)
     (define error-site (search-subform/error     l     c form 'raise-contract-error))
@@ -56,10 +59,12 @@
 ;; Check syntax before passing to racket's #%module-begin
 (define-syntax checked-module-begin
   (syntax-parser
+    ;; Raise customized error message with no contract source
     [(_ (line:integer col:integer msg:str) forms ...)
      (for ([form (syntax->list #'(forms ...))])
        (raise-simple-error (syntax-e #'line) (syntax-e #'col) (syntax-e #'msg) form))
      #'(#%module-begin forms ...)]
+    ;; Raise contract violation with contract definition site
     [(_ (line:integer col:integer ctc-line:integer ctc-col:integer) forms ...)
      (for ([form (syntax->list #'(forms ...))])
        (raise-contract-error (syntax-e #'line) (syntax-e #'col)
