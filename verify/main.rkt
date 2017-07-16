@@ -68,8 +68,8 @@
     [(_ (line:integer col:integer ctc-line:integer ctc-col:integer) forms ...)
      (for ([form (syntax->list #'(forms ...))])
        (raise-contract-error (syntax-e #'line) (syntax-e #'col)
-                                   (syntax-e #'ctc-line) (syntax-e #'ctc-col)
-                                   form))
+                             (syntax-e #'ctc-line) (syntax-e #'ctc-col)
+                             form))
      #'(#%module-begin forms ...)]
     [(_ forms ...) ; no errror case
      #'(#%module-begin forms ...)]))
