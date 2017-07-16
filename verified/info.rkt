@@ -1,6 +1,6 @@
 #lang info
 
-(define collection "verify")
+(define collection "verified")
 
 (define pkg-desc "Language with static contract verification")
 

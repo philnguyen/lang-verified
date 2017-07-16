@@ -1,4 +1,4 @@
-#lang verify
+#lang verified
 
 (define/contract (inc n)
   (integer? . -> . integer?)

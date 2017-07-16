@@ -9,15 +9,15 @@ Prototype of a language with contract verification
 git clone git@github.com:philnguyen/lang-verified.git
 ```
 
-* Install the package from `verify` directory:
+* Install the package from `verified` directory:
 
 ```
-cd lang-verified/verify
+cd lang-verified/verified
 raco pkg install
 ```
 
 ## Uninstallation
 
 ```
-raco pkg remove verify
+raco pkg remove verified
 ```
